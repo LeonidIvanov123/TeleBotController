@@ -41,19 +41,23 @@ class DbConnector {
     }
 
 
-    public void writetoDB(String s) throws SQLException {
+    public void writetoDB(RequestStruct s) throws SQLException {
         if(dbCon == null) {
             System.out.println("Нет соединения с БД");
             return;
         }
         stmt = dbCon.createStatement();
-        System.out.print("writetodb:    ");
-        rs = stmt.executeQuery("SELECT * FROM botusers WHERE idmsg=(SELECT max(idmsg) FROM botusers)");
-       // stmt.execute("INSERT INTO `mydbforbot`.`botusers` (`idmsg`, `username`, `text`) VALUES ('2', 'Ivan', 'priv')"); //сработало
+        String sqlInsertdata = "INSERT INTO botusers (`idmsg`, `username`, `text`) VALUES ('" + s.update_id + "', '" + s.username + "', '" + s.text + "');";
+        System.out.print("writetodb:    " + s.update_id + "..." + s.username + "..." + s.text +"\n");
+        stmt.executeUpdate(sqlInsertdata);
+        //executeQuery - для получения данных, executeUpdate для вставки, модификации, удаления
 
+        //rs = stmt.executeQuery("SELECT * FROM botusers WHERE idmsg=(SELECT max(idmsg) FROM botusers)");
+       // stmt.execute("INSERT INTO `mydbforbot`.`botusers` (`idmsg`, `username`, `text`) VALUES ('2', 'Ivan', 'priv')"); //сработало
+        /*
         while(rs.next()){
             System.out.println(rs.getNString("username"));
-        }
+        }*/
         stmt.close();
         //"INSERT INTO `mydbforbot`.`botusers` (`idmsg`, `username`, `text`) VALUES ('1', 'LEON', 'hello');"
     }

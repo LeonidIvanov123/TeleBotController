@@ -18,21 +18,27 @@ public class BotCommand {
         botAddress = url;
     }
 
-    public String getDataBot(){
+    public String getDataBot(long offset){
         String getData = "";
         URL mybot = null;
         try {
-            mybot = new URL(botAddress + "getupdates");
+            mybot = new URL(botAddress + "getupdates" + "?offset=" + offset);
             URLConnection tlg = mybot.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(tlg.getInputStream()));
             String inputData = "";
             while ((inputData = in.readLine())!=null){
                 getData = getData + inputData + '\n';
             }
-            if(getData.length() > 5)
+
+            /*
+            if(getData.length() > 5) {
                 parseData(getData);
+            } else {
+                System.out.println("Новых сообщений нет");
+            }
+            */
         } catch (IOException e) {
-            System.out.println("Ошибка при установлении соединения с telegram");
+            System.out.println("Ошибка при установлении соединения с telegram(BotCommand" + "offset = " + offset);
             e.printStackTrace();
         }
         return getData;
@@ -76,10 +82,3 @@ public class BotCommand {
 
 }
 
-class RequestStruct{
-    long update_id;
-    long user_id;
-    String username;
-    long chat_id;
-    String text;
-}
