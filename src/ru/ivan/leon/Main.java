@@ -1,5 +1,7 @@
 package ru.ivan.leon;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -9,7 +11,7 @@ public class Main {
 
     static String botAddress;
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, UnsupportedEncodingException {
         long lastidupdate;
 
         DbConnector mydatabase = new DbConnector("jdbc:mysql://127.0.0.1:3306/myDBforbot", "myDBforbot.db3");
@@ -24,11 +26,13 @@ public class Main {
         String data = bot.getDataBot(lastidupdate + 1); // Запрашиваем еще не обработанные сообщения
         //В строке data ответ от бота
         ArrayList<RequestStruct> d = bot.parseData(data); //резбираем данные от бота в структуру
-        for(int i = 0; i < d.size(); i++)
+        for(int i = 0; i < d.size(); i++) {
             mydatabase.writetoDB(d.get(i));
+           // byte[] by = d.get(i).text.getBytes(System.getProperty("console.encoding", "Cp866"));
+            bot.sendtoChat(d.get(i).chat_id, "сообщение: " + d.get(i).text + " обработано");
+        }
 
-
-        //Если есть сообщения, пишем в БД
+        //for test
         if(data != "") {
             System.out.println(data);
 

@@ -1,6 +1,7 @@
 package ru.ivan.leon;
 import org.json.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,7 +45,21 @@ public class BotCommand {
         return getData;
     }
 
-    public void storyToBD(){
+    public void sendtoChat(long chatId, String text){
+        String urlcommand = botAddress + "/sendMessage" + "?chat_id=" + chatId + "&text="+ text;
+        try {
+            URL url = new URL(urlcommand);
+            URLConnection urlcon = url.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
+            in.read();
+            in.close();
+        } catch (MalformedURLException e) {
+            System.out.println("Не получается ответить юзеру (BotCommand.sendtoChat)");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Не получается ответить юзеру (BotCommand.sendtoChat)");
+            e.printStackTrace();
+        }
 
     }
 
@@ -69,7 +84,7 @@ public class BotCommand {
             str = str.substring(str.indexOf("\"username\":") + 11);
             r.username = str.substring(1, str.indexOf(","));
 
-            str = str.substring(str.indexOf("\"chat\":{\"id\":")+ 13); //от этой подстроки и до конца строки
+            str = str.substring(str.indexOf("\"chat\":{\"id\":")+ 12); //от этой подстроки и до конца строки
             r.chat_id = Long.parseLong(str.substring(1, str.indexOf(",")));
 
             str = str.substring(str.indexOf("\"text\":") + 7);

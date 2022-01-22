@@ -1,5 +1,6 @@
 package ru.ivan.leon;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
 class DbConnector {
