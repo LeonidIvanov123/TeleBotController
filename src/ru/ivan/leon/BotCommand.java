@@ -46,7 +46,7 @@ public class BotCommand {
     }
 
     public void sendtoChat(long chatId, String text){
-        String urlcommand = botAddress + "/sendMessage" + "?chat_id=" + chatId + "&text="+ text;
+        String urlcommand = botAddress + "sendMessage" + "?chat_id=" + chatId + "&text="+ text + "";
         try {
             URL url = new URL(urlcommand);
             URLConnection urlcon = url.openConnection();
@@ -82,14 +82,14 @@ public class BotCommand {
             r.user_id = Long.parseLong(str.substring(0, str.indexOf(",")));
 
             str = str.substring(str.indexOf("\"username\":") + 11);
-            r.username = str.substring(1, str.indexOf(","));
+            r.username = str.substring(1, str.indexOf(",")-1);
 
             str = str.substring(str.indexOf("\"chat\":{\"id\":")+ 12); //от этой подстроки и до конца строки
             r.chat_id = Long.parseLong(str.substring(1, str.indexOf(",")));
 
             str = str.substring(str.indexOf("\"text\":") + 7);
             //System.out.println("ПОСЛЕДНИЙ ШАГ = " +str);
-            r.text = str.substring(1, str.indexOf("}"));
+            r.text = str.substring(1, str.indexOf("}")-1);
             dataarr.add(r);
     }
         return dataarr;
