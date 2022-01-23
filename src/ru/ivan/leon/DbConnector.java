@@ -52,13 +52,6 @@ class DbConnector {
         System.out.print("writetodb:    " + s.update_id + "..." + s.username + "..." + s.text +"\n");
         stmt.executeUpdate(sqlInsertdata);
         //executeQuery - для получения данных, executeUpdate для вставки, модификации, удаления
-
-        //rs = stmt.executeQuery("SELECT * FROM botusers WHERE idmsg=(SELECT max(idmsg) FROM botusers)");
-       // stmt.execute("INSERT INTO `mydbforbot`.`botusers` (`idmsg`, `username`, `text`) VALUES ('2', 'Ivan', 'priv')"); //сработало
-        /*
-        while(rs.next()){
-            System.out.println(rs.getNString("username"));
-        }*/
         stmt.close();
         //"INSERT INTO `mydbforbot`.`botusers` (`idmsg`, `username`, `text`) VALUES ('1', 'LEON', 'hello');"
     }
@@ -71,5 +64,9 @@ class DbConnector {
         rs.next(); //КУРСОР НА ПЕРВУЮ СТРОКУ!!!
         lastID = rs.getLong(1);
         return lastID;
+    }
+
+    public void writeLOG(String msg){
+
     }
 }

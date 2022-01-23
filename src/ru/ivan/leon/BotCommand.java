@@ -5,9 +5,11 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 
@@ -30,14 +32,6 @@ public class BotCommand {
             while ((inputData = in.readLine())!=null){
                 getData = getData + inputData + '\n';
             }
-
-            /*
-            if(getData.length() > 5) {
-                parseData(getData);
-            } else {
-                System.out.println("Новых сообщений нет");
-            }
-            */
         } catch (IOException e) {
             System.out.println("Ошибка при установлении соединения с telegram(BotCommand" + "offset = " + offset);
             e.printStackTrace();
@@ -50,6 +44,7 @@ public class BotCommand {
         try {
             URL url = new URL(urlcommand);
             URLConnection urlcon = url.openConnection();
+            urlcon.setRequestProperty("Content-Type", "charset=Windows-1251");
             BufferedReader in = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
             in.read();
             in.close();
@@ -90,6 +85,11 @@ public class BotCommand {
             str = str.substring(str.indexOf("\"text\":") + 7);
             //System.out.println("ПОСЛЕДНИЙ ШАГ = " +str);
             r.text = str.substring(1, str.indexOf("}")-1);
+            //////////
+            //String tmp = System.getProperty("console.encoding","Cp866");
+            //tmp = r.text;//.getBytes(StandardCharsets.UTF_8);
+            /////////
+
             dataarr.add(r);
     }
         return dataarr;

@@ -1,14 +1,12 @@
 package ru.ivan.leon;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Main {
 
     //Идентификационные данные вынесены в БД
-
     static String botAddress;
 
     public static void main(String[] args) throws InterruptedException {
@@ -43,7 +41,8 @@ class WorkThread implements Runnable{
         while(threadIsRun){
             String data = bot.getDataBot(lastidupdate + 1); // Запрашиваем еще не обработанные сообщения
 
-            ArrayList<RequestStruct> d = bot.parseData(data); //разбираем данные от бота в структуру
+            ArrayList<RequestStruct> d = null; //разбираем данные от бота в структуру
+            d = bot.parseData(data);
             for(int i = 0; i < d.size(); i++) {
                 try {
                     mydatabase.writetoDB(d.get(i));
@@ -83,16 +82,6 @@ class WorkThread implements Runnable{
         } catch (SQLException e) {
             System.out.println("Ошибка с чтением lastupdate из БД (Run())");
         }
-        //String data = bot.getDataBot(lastidupdate + 1); // Запрашиваем еще не обработанные сообщения
-
-        //В строке data ответ от бота
-        //ArrayList<RequestStruct> d = bot.parseData(data); //резбираем данные от бота в структуру
-       // for(int i = 0; i < d.size(); i++) {
-       //    mydatabase.writetoDB(d.get(i));
-       //    byte[] by = d.get(i).text.getBytes(System.getProperty("console.encoding", "Cp866"));
-       //    bot.sendtoChat(d.get(i).chat_id, "сообщение: " + d.get(i).text + " обработано");
-      //  }
-
     }
 }
 
