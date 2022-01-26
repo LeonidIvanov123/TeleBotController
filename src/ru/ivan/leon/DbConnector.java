@@ -66,7 +66,9 @@ class DbConnector {
         return lastID;
     }
 
-    public void writeLOG(String msg){
-
+    public void writeLOG(String msg) throws SQLException {
+        stmt = dbCon.createStatement();
+        stmt.executeUpdate("INSERT INTO logtable (message) VALUES ('" + msg + "');");
+        stmt.close();
     }
 }

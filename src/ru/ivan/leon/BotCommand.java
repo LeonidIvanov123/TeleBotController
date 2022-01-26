@@ -1,7 +1,6 @@
 package ru.ivan.leon;
 import org.json.JSONObject;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,7 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
+import java.util.Locale;
 
 public class BotCommand {
 
@@ -28,10 +27,12 @@ public class BotCommand {
             mybot = new URL(botAddress + "getupdates" + "?offset=" + offset);
             URLConnection tlg = mybot.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(tlg.getInputStream()));
+
             String inputData = "";
             while ((inputData = in.readLine())!=null){
                 getData = getData + inputData + '\n';
             }
+
         } catch (IOException e) {
             System.out.println("Ошибка при установлении соединения с telegram(BotCommand" + "offset = " + offset);
             e.printStackTrace();
@@ -44,7 +45,7 @@ public class BotCommand {
         try {
             URL url = new URL(urlcommand);
             URLConnection urlcon = url.openConnection();
-            urlcon.setRequestProperty("Content-Type", "charset=Windows-1251");
+            //urlcon.setRequestProperty("Content-Type", "charset=Windows-1251");
             BufferedReader in = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
             in.read();
             in.close();
@@ -58,7 +59,7 @@ public class BotCommand {
 
     }
 
-    public ArrayList<RequestStruct> parseData(String str) {
+    public ArrayList<RequestStruct> parseData(String str) throws UnsupportedEncodingException {
         ArrayList<RequestStruct> dataarr = new ArrayList<RequestStruct>();
 
         while (str.indexOf("update_id") != -1) {
@@ -72,7 +73,6 @@ public class BotCommand {
             System.out.println("Update Id = " + updID + " convert to Long = " + r.update_id);
 
             str = str.substring(str.indexOf(updID) + updID.length() + 1);
-            //System.out.println(str);
             str = str.substring(str.indexOf("\"id\":")+ 6);
             r.user_id = Long.parseLong(str.substring(0, str.indexOf(",")));
 
@@ -85,10 +85,11 @@ public class BotCommand {
             str = str.substring(str.indexOf("\"text\":") + 7);
             //System.out.println("ПОСЛЕДНИЙ ШАГ = " +str);
             r.text = str.substring(1, str.indexOf("}")-1);
-            //////////
-            //String tmp = System.getProperty("console.encoding","Cp866");
-            //tmp = r.text;//.getBytes(StandardCharsets.UTF_8);
-            /////////
+
+            //Рабочее преобразование unicode в рус.
+            System.out.println(Character.toUpperCase((char) '\u041f'));
+            //
+
 
             dataarr.add(r);
     }

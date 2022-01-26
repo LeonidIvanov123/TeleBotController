@@ -31,7 +31,6 @@ class WorkThread implements Runnable{
 
     @Override
     public void run() {
-        //Thread t = Thread.currentThread();
         boolean threadIsRun = true;
         try {
             init();
@@ -40,9 +39,12 @@ class WorkThread implements Runnable{
         }
         while(threadIsRun){
             String data = bot.getDataBot(lastidupdate + 1); // Запрашиваем еще не обработанные сообщения
-
             ArrayList<RequestStruct> d = null; //разбираем данные от бота в структуру
-            d = bot.parseData(data);
+            try {
+                d = bot.parseData(data);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             for(int i = 0; i < d.size(); i++) {
                 try {
                     mydatabase.writetoDB(d.get(i));
@@ -50,7 +52,7 @@ class WorkThread implements Runnable{
                     System.out.println("Ошибка с записью в БД (Run())");
                 }
                 // byte[] by = d.get(i).text.getBytes(System.getProperty("console.encoding", "Cp866"));
-                bot.sendtoChat(d.get(i).chat_id, "сообщение: " + d.get(i).text + " обработано");
+                bot.sendtoChat(d.get(i).chat_id, "Сообщение: " + d.get(i).text + " обработано");
             }
             //Если было получено хоть одно сообщение в этом цикле - Обновляем индекс последнего апдейта
             if(d.size() >0) {
@@ -59,8 +61,6 @@ class WorkThread implements Runnable{
                     bot.sendtoChat(d.get(d.size() - 1).chat_id, "Bot has stopped!");
                     threadIsRun = false;
                 }
-                //System.out.println("Проверка на остановку бота: ...");
-                //System.out.println(d.get(d.size() - 1).text + "Сравнение с Stopbot = " + (d.get(d.size() - 1).text.compareTo("Stopbot")));
             }
             try {
                 Thread.sleep(1000);
@@ -68,12 +68,16 @@ class WorkThread implements Runnable{
                 e.printStackTrace();
             }
         }
+        try {
+            mydatabase.writeLOG("Завершение потока run().Выход из программы");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     void init() throws SQLException {
         mydatabase = new DbConnector("jdbc:mysql://127.0.0.1:3306/myDBforbot", "myDBforbot.db3");
         System.out.println("Подключение к БД бота:(Main) " + mydatabase.connectToDB());
-
         botAddress = mydatabase.getBotAddress();
         bot = new BotCommand(botAddress); //инициализация бота
 
@@ -82,6 +86,7 @@ class WorkThread implements Runnable{
         } catch (SQLException e) {
             System.out.println("Ошибка с чтением lastupdate из БД (Run())");
         }
+        mydatabase.writeLOG("Инициализация выполнена. init()");
     }
 }
 
