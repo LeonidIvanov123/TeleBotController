@@ -41,6 +41,13 @@ class DbConnector {
         return rs.getString(1);
     }
 
+    public String getWeatherAddress() throws SQLException {
+        stmt = dbCon.createStatement();
+        rs = stmt.executeQuery("SELECT value FROM botconfig WHERE (param = 'weatherAPI')");
+        rs.next();
+        return rs.getString(1);
+    }
+
 
     public void writetoDB(RequestStruct s) throws SQLException {
         if(dbCon == null) {
@@ -48,7 +55,7 @@ class DbConnector {
             return;
         }
         stmt = dbCon.createStatement();
-        String sqlInsertdata = "INSERT INTO botusers (`idmsg`, `username`, `text`) VALUES ('" + s.update_id + "', '" + s.username + "', '" + s.text + "');";
+        String sqlInsertdata = "INSERT INTO botusers (`idmsg`,`chatid`,`username`, `text`) VALUES ('" + s.update_id + "', '" + s.chat_id + "', '" + s.username + "', '" + s.text + "');";
         System.out.print("writetodb:    " + s.update_id + "..." + s.username + "..." + s.text +"\n");
         stmt.executeUpdate(sqlInsertdata);
         //executeQuery - для получения данных, executeUpdate для вставки, модификации, удаления

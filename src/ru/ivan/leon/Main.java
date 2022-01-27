@@ -1,6 +1,8 @@
 package ru.ivan.leon;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -51,8 +53,17 @@ class WorkThread implements Runnable{
                 } catch (SQLException e) {
                     System.out.println("Ошибка с записью в БД (Run())");
                 }
-                // byte[] by = d.get(i).text.getBytes(System.getProperty("console.encoding", "Cp866"));
-                bot.sendtoChat(d.get(i).chat_id, "Сообщение: " + d.get(i).text + " обработано");
+                bot.sendtoChat(d.get(i).chat_id, "Сообщение: " + d.get(i).text + " принято ботом.");
+                try {
+                    String st = bot.searchusercommand(d.get(i), mydatabase);
+                    if(!(st.equals(""))) {
+                        bot.sendtoChat(d.get(i).chat_id, bot.searchusercommand(d.get(i), mydatabase));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             //Если было получено хоть одно сообщение в этом цикле - Обновляем индекс последнего апдейта
             if(d.size() >0) {
