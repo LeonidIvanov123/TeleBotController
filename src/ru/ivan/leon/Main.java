@@ -2,7 +2,6 @@ package ru.ivan.leon;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 

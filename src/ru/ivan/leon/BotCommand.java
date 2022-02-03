@@ -9,6 +9,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 public class BotCommand {
@@ -120,7 +121,8 @@ public class BotCommand {
                 }
                 break;
             case ("Time"):
-                result = "Команда time";
+                Date dt = new Date();
+                result = "Команда time" + dt.toString();
                 break;
         }
         return result;
