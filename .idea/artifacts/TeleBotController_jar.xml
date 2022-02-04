@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TeleBotController:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TeleBotController_jar</output-path>
+    <root id="archive" name="TeleBotController.jar">
+      <element id="module-output" name="TeleBotController" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/mysql-connector-java-8.0.27.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../MyTeleBot/.idea/libraries/json-20211205.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
