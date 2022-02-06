@@ -1,5 +1,5 @@
 package ru.ivan.leon;
-import org.json.JSONObject;
+//import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -24,7 +24,11 @@ public class BotCommand {
         String getData = "";
         URL mybot = null;
         try {
-            mybot = new URL(botAddress + "getupdates" + "?offset=" + offset);
+            if(offset == 1){
+                mybot = new URL(botAddress + "getupdates");
+            }else{
+                mybot = new URL(botAddress + "getupdates" + "?offset=" + offset);
+            }
             URLConnection tlg = mybot.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(tlg.getInputStream()));
 

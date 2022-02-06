@@ -3,6 +3,7 @@ package ru.ivan.leon;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class Main {
@@ -86,7 +87,8 @@ class WorkThread implements Runnable{
     }
 
     void init() throws SQLException {
-        mydatabase = new DbConnector("jdbc:mysql://127.0.0.1:3306/myDBforbot", "myDBforbot.db3");
+        //mydatabase = new DbConnector("jdbc:mysql://127.0.0.1:3306/myDBforbot", "myDBforbot.db3");
+        mydatabase = new DbConnector("jdbc:mysql://172.17.0.2:3306/myDBforbot", "myDBforbot.db3");
         System.out.println("Подключение к БД бота:(Main) " + mydatabase.connectToDB());
         botAddress = mydatabase.getBotAddress();
         bot = new BotCommand(botAddress); //инициализация бота
