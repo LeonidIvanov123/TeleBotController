@@ -21,8 +21,8 @@ ENV MYSQL_PASSWORD="IamBottelegramm"
 
 #put in initializeBD.sql file and execute in dockerfile. init BD for bot
 #COPY out/artifacts/initializeBD.sql /docker-entrypoint-initdb.d/
-COPY out/artifacts/initializeBD.sql /tmp
-WORKDIR /tmp
-RUN mysql -u "BotApplication" -p "IamBottelegramm" initializeBD.sql
+#COPY out/artifacts/initializeBD.sql /tmp
+#WORKDIR /tmp
+#RUN mysql -u "BotApplication" -p "IamBottelegramm" initializeBD.sql
 
 #C.UTF-8
