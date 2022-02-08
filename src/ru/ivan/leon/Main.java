@@ -87,9 +87,9 @@ class WorkThread implements Runnable{
     }
 
     void init() throws SQLException {
-        mydatabase = new DbConnector("jdbc:mysql://127.0.0.1:3306/myDBforbot", "myDBforbot.db3");
-        //mydatabase = new DbConnector("jdbc:mysql://localhost:50390/myDBforbot", "myDBforbot.db3");
-        System.out.println("Подключение к БД бота:(Main) " + mydatabase.connectToDB());
+        //mydatabase = new DbConnector("jdbc:mysql://127.0.0.1:3306/myDBforbot", "myDBforbot.db3");
+        mydatabase = new DbConnector("jdbc:mysql://localhost:50770/myDBforbot", "myDBforbot");
+        System.out.println("Подключение к БД бота:(Main) ====>" + mydatabase.connectToDB() +"<==== Address_db: "+ mydatabase.dbaddress);
         botAddress = mydatabase.getBotAddress();
         bot = new BotCommand(botAddress); //инициализация бота
 

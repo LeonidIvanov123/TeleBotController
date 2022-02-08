@@ -1,0 +1,7 @@
+FROM openjdk:latest
+EXPOSE 3306
+ENV LC_ALL C.UTF-8
+COPY out/artifacts/TeleBotController_jar /tmp
+#COPY .idea/libraries/mysql-connector-java-8.0.27.jar /tmp
+WORKDIR /tmp
+CMD java -jar TeleBotController.jar

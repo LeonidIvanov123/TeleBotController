@@ -19,7 +19,8 @@ class DbConnector {
         try {
             dbCon = DriverManager.getConnection(dbaddress, "BotApplication", "IamBottelegramm");
         } catch (SQLException  e) {
-            System.out.println(e.toString() + "Error in connection to DB");
+            System.out.println(e.toString() + "  <--- Error in connection to DB");
+            e.printStackTrace();
         }
         if (dbCon != null) {
             stmt = dbCon.createStatement();
