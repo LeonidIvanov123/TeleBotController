@@ -1,4 +1,4 @@
-FROM mysql:latest
+FROM mysql
 EXPOSE 3306
 ENV TZ="Europe/Moscow"
 ENV MYSQL_ROOT_PASSWORD="IamBottelegramm"

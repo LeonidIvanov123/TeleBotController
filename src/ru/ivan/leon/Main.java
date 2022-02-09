@@ -10,16 +10,26 @@ public class Main {
 
     //Идентификационные данные вынесены в БД
     static String botAddress;
+    static String bdAddress;
+    static String bdPort;
 
     public static void main(String[] args) throws InterruptedException {
+        System.out.println("Start programm v:1.1"); //настроить лог в БД (logtable)
 
-        System.out.println("Старт программы"); //настроить лог в БД (logtable)
-        WorkThread wtr = new WorkThread();
+        if(args.length>0){
+            bdAddress = args[0];
+            bdPort = args[1];
+            System.out.println("Address BD mysql from cmd: "+ bdAddress + ":" + bdPort);
+        } else{
+            bdAddress = "";
+            bdPort = "";
+        }
+        WorkThread wtr = new WorkThread(bdAddress, bdPort);
         Thread wtrTread = new Thread(wtr);
         wtrTread.start();
         wtrTread.join(); //Ждем завершения работы потока wtr
 
-        System.out.println("Программа остановлена");
+        System.out.println("Exit from programm");
     }
 
 }
@@ -30,12 +40,18 @@ class WorkThread implements Runnable{
     long lastidupdate = 0;
     static DbConnector mydatabase;
     static BotCommand bot;
+    private String dbaddr, dbport;
+
+    WorkThread(String addr, String port){
+        dbaddr = addr;
+        dbport = port;
+    }
 
     @Override
     public void run() {
         boolean threadIsRun = true;
         try {
-            init();
+            init(dbaddr, dbport);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,10 +102,15 @@ class WorkThread implements Runnable{
         }
     }
 
-    void init() throws SQLException {
-        //mydatabase = new DbConnector("jdbc:mysql://127.0.0.1:3306/myDBforbot", "myDBforbot.db3");
-        mydatabase = new DbConnector("jdbc:mysql://localhost:50770/myDBforbot", "myDBforbot");
-        System.out.println("Подключение к БД бота:(Main) ====>" + mydatabase.connectToDB() +"<==== Address_db: "+ mydatabase.dbaddress);
+    void init(String dbaddr, String dbport) throws SQLException {
+        if(dbaddr != "") {
+            mydatabase = new DbConnector("jdbc:mysql://" + dbaddr + ":" + dbport + "/myDBforbot", "myDBforbot");
+        }else {
+            mydatabase = new DbConnector("jdbc:mysql://localhost:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot.db3");
+        }
+        //mydatabase = new DbConnector("jdbc:mysql://localhost:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot.db3");
+        //mydatabase = new DbConnector("jdbc:mysql://dbforbot:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot");
+        System.out.println("Connected to bot DBase:(init()) ====>" + mydatabase.connectToDB() +"<==== Address_db: "+ mydatabase.dbaddress);
         botAddress = mydatabase.getBotAddress();
         bot = new BotCommand(botAddress); //инициализация бота
 

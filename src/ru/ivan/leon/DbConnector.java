@@ -16,11 +16,25 @@ class DbConnector {
     }
 
     public boolean connectToDB() throws SQLException {
-        try {
-            dbCon = DriverManager.getConnection(dbaddress, "BotApplication", "IamBottelegramm");
-        } catch (SQLException  e) {
-            System.out.println(e.toString() + "  <--- Error in connection to DB");
-            e.printStackTrace();
+        System.out.print("Connect to DB(9 try): ");
+        for(int t = 0; t < 9;) {
+            try {
+                dbCon = DriverManager.getConnection(dbaddress, "BotApplication", "IamBottelegramm");
+            } catch (SQLException e) {
+                t++;
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException u) {
+                    u.printStackTrace();
+                }
+            }
+            if(dbCon!= null) break;
+            System.out.print(t + "...");
+        }
+        System.out.println();
+        if(dbCon == null){
+            System.out.println("Do not connected to DB");
+            System.exit(1);
         }
         if (dbCon != null) {
             stmt = dbCon.createStatement();

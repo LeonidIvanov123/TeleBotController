@@ -2,20 +2,22 @@ version: "3"
 
 services:
   mysql:
-    network_mode: host
+#    network_mode: host
     container_name: dbforbot
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "50770:3306"
-   # restart: always
 
   application:
-    network_mode: host
+#    network_mode: host
     container_name: appbot
     build:
       context: .
       dockerfile: DockerfileAPP
+    depends_on:
+     - mysql
+    command: bash -c "java -jar TeleBotController.jar dbforbot 3306"
     restart: on-failure
 
