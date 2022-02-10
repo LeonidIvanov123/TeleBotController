@@ -129,7 +129,6 @@ public class BotCommand {
                     result = result + inputData + '\n';
                 }
 
-
                 Object obj = new JSONParser().parse(result);
                 JSONObject jo = (JSONObject) obj;
                 JSONObject temp = (JSONObject) jo.get("main");
