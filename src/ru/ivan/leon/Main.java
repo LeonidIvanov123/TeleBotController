@@ -1,5 +1,7 @@
 package ru.ivan.leon;
 
+import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -73,11 +75,13 @@ class WorkThread implements Runnable{
                 try {
                     String st = bot.searchusercommand(d.get(i), mydatabase);
                     if(!(st.equals(""))) {
-                        bot.sendtoChat(d.get(i).chat_id, bot.searchusercommand(d.get(i), mydatabase));
+                        bot.sendtoChat(d.get(i).chat_id, st);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }

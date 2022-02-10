@@ -1,6 +1,11 @@
 package ru.ivan.leon;
 //import org.json.JSONObject;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.MalformedURLException;
@@ -111,7 +116,7 @@ public class BotCommand {
         return res;
     }
 
-    String searchusercommand(RequestStruct req, DbConnector db) throws SQLException, IOException {
+    String searchusercommand(RequestStruct req, DbConnector db) throws SQLException, IOException, ParseException {
         String result = "";
         switch (req.text) {
             case ("Weather"):
@@ -123,12 +128,23 @@ public class BotCommand {
                 while ((inputData = in.readLine())!=null){
                     result = result + inputData + '\n';
                 }
+
+
+                Object obj = new JSONParser().parse(result);
+                JSONObject jo = (JSONObject) obj;
+                JSONObject temp = (JSONObject) jo.get("main");
+                result = "*********Погода*********" + "%0AГород: " + jo.get("name").toString() +
+                        "%0AОщущается как: " + temp.get("feels_like").toString() +
+                        "%0AТекущая температура: " + temp.get("temp").toString() +
+                        "%0AАтм. давление: " + temp.get("pressure").toString();
                 break;
             case ("Time"):
                 Date dt = new Date();
-                result = "Команда time" + dt.toString();
+                result = "Текущее время сервера: %0A " + dt.toString();
                 break;
         }
+        if(!result.equals(""))
+            db.writeLOG("MSG to user "+ req.username + " : " + result);
         return result;
     }
 
