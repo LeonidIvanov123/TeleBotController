@@ -5,6 +5,8 @@
       <element id="module-output" name="TeleBotController" />
       <element id="extracted-dir" path="$USER_HOME$/Documents/mysql-connector-java-8.0.27.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../MyTeleBot/.idea/libraries/json-20211205.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/.idea/libraries/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/.idea/libraries/mysql-connector-java-8.0.27.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
