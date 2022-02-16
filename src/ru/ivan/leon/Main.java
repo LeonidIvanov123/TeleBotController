@@ -5,7 +5,6 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.sql.*;
 import java.util.ArrayList;
 
 public class Main {
