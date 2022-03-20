@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Start programm v:1.1"); //настроить лог в БД (logtable)
-
+            args = new String[]{"localhost", "50770"};
         if(args.length>0){
             bdAddress = args[0];
             bdPort = args[1];
@@ -58,6 +58,10 @@ class WorkThread implements Runnable{
         }
         while(threadIsRun){
             String data = bot.getDataBot(lastidupdate + 1); // Запрашиваем еще не обработанные сообщения
+            if (!bot.statusConnect){
+                System.out.println("Ожидаем восстановления подключения к телеграму");
+                bot.stateConnect(); //метод проверяет состояние подключени к телеграму.
+            }
             ArrayList<RequestStruct> d = null; //разбираем данные от бота в структуру
             try {
                 d = bot.parseData(data);

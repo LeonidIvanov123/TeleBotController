@@ -1,7 +1,5 @@
 package ru.ivan.leon;
-//import org.json.JSONObject;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -20,9 +18,29 @@ import java.util.Locale;
 public class BotCommand {
 
     String botAddress;
+    boolean statusConnect = true;
 
     BotCommand(String url){
         botAddress = url;
+    }
+
+    public void stateConnect(){
+        for(int i = 1; i<10; i++) {
+            try {
+                Thread.sleep(3000);
+                URLConnection url = new URL(botAddress).openConnection();
+                InputStreamReader is = new InputStreamReader(url.getInputStream());
+                statusConnect = true; //если не ушли в catch
+            } catch (IOException | InterruptedException e) {
+                System.out.print(i + " ... ");
+                statusConnect = false;
+            }
+            if(statusConnect) break;
+        }
+        if(!statusConnect){
+            System.out.println("Do not connected to Telegram");
+            System.exit(1);
+        }
     }
 
     public String getDataBot(long offset){
@@ -31,6 +49,7 @@ public class BotCommand {
         try {
             if(offset == 1){
                 mybot = new URL(botAddress + "getupdates");
+                //if ERROR = in file 'createDBforBot.sql' add you telegrambot address!!!!
             }else{
                 mybot = new URL(botAddress + "getupdates" + "?offset=" + offset);
             }
@@ -41,10 +60,12 @@ public class BotCommand {
             while ((inputData = in.readLine())!=null){
                 getData = getData + inputData + '\n';
             }
-
+            statusConnect = true;
         } catch (IOException e) {
-            System.out.println("Ошибка при установлении соединения с telegram(BotCommand" + "offset = " + offset);
-            e.printStackTrace();
+            System.out.println("Ошибка при установлении соединения с telegram(BotCommand" + "offset = " + offset
+            + "\nОшибка в адресе бота или нет соединения с telegram.org.");
+            statusConnect = false;
+            //e.printStackTrace();
         }
         return getData;
     }
