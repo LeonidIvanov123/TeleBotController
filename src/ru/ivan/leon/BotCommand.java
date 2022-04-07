@@ -9,6 +9,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,18 +24,23 @@ public class BotCommand {
 
     BotCommand(String url){
         botAddress = url;
+        stateConnect();
     }
 
     public void stateConnect(){
         for(int i = 1; i<10; i++) {
             try {
-                Thread.sleep(3000);
-                URLConnection url = new URL(botAddress).openConnection();
+                URLConnection url = new URL(botAddress + "getMe").openConnection();
                 InputStreamReader is = new InputStreamReader(url.getInputStream());
                 statusConnect = true; //если не ушли в catch
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 System.out.print(i + " ... ");
                 statusConnect = false;
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
             if(statusConnect) break;
         }
@@ -44,7 +51,7 @@ public class BotCommand {
     }
 
     public String getDataBot(long offset){
-        String getData = "";
+        StringBuilder sb = new StringBuilder();
         URL mybot = null;
         try {
             if(offset == 1){
@@ -58,8 +65,9 @@ public class BotCommand {
 
             String inputData = "";
             while ((inputData = in.readLine())!=null){
-                getData = getData + inputData + '\n';
+                sb.append(inputData);
             }
+
             statusConnect = true;
         } catch (IOException e) {
             System.out.println("Ошибка при установлении соединения с telegram(BotCommand" + "offset = " + offset
@@ -67,7 +75,8 @@ public class BotCommand {
             statusConnect = false;
             //e.printStackTrace();
         }
-        return getData;
+
+        return sb.toString();
     }
 
     public void sendtoChat(long chatId, String text){

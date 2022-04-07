@@ -29,7 +29,6 @@ public class Main {
         Thread wtrTread = new Thread(wtr);
         wtrTread.start();
         wtrTread.join(); //Ждем завершения работы потока wtr
-
         System.out.println("Exit from programm");
     }
 
@@ -115,12 +114,9 @@ class WorkThread implements Runnable{
         }else {
             mydatabase = new DbConnector("jdbc:mysql://localhost:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot.db3");
         }
-        //mydatabase = new DbConnector("jdbc:mysql://localhost:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot.db3");
-        //mydatabase = new DbConnector("jdbc:mysql://dbforbot:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot");
         System.out.println("Connected to bot DBase:(init()) ====>" + mydatabase.connectToDB() +"<==== Address_db: "+ mydatabase.dbaddress);
         botAddress = mydatabase.getBotAddress();
         bot = new BotCommand(botAddress); //инициализация бота
-
         try {
             lastidupdate = mydatabase.getLastupdID(); //id последнего обновления от бота(берем из БД при инициализации потока, запуске программы)
         } catch (SQLException e) {
