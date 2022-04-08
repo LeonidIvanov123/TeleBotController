@@ -15,15 +15,15 @@ public class Main {
     static String bdPort;
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("Start programm v:1.1"); //настроить лог в БД (logtable)
-            args = new String[]{"localhost", "50770"};
+        System.out.println("Start programm v:1.2"); //настроить лог в БД (logtable)
+            //args = new String[]{"localhost", "50770"};
         if(args.length>0){
             bdAddress = args[0];
             bdPort = args[1];
             System.out.println("Address BD mysql from cmd: "+ bdAddress + ":" + bdPort);
         } else{
-            bdAddress = "";
-            bdPort = "";
+            bdAddress = "localhost";
+            bdPort = "50770";
         }
         WorkThread wtr = new WorkThread(bdAddress, bdPort);
         Thread wtrTread = new Thread(wtr);
@@ -57,10 +57,6 @@ class WorkThread implements Runnable{
         }
         while(threadIsRun){
             String data = bot.getDataBot(lastidupdate + 1); // Запрашиваем еще не обработанные сообщения
-            if (!bot.statusConnect){
-                System.out.println("Ожидаем восстановления подключения к телеграму");
-                bot.stateConnect(); //метод проверяет состояние подключени к телеграму.
-            }
             ArrayList<RequestStruct> d = null; //разбираем данные от бота в структуру
             try {
                 d = bot.parseData(data);
@@ -117,6 +113,10 @@ class WorkThread implements Runnable{
         System.out.println("Connected to bot DBase:(init()) ====>" + mydatabase.connectToDB() +"<==== Address_db: "+ mydatabase.dbaddress);
         botAddress = mydatabase.getBotAddress();
         bot = new BotCommand(botAddress); //инициализация бота
+        if (!bot.statusConnect){
+            System.out.println("Ожидаем восстановления подключения к телеграму");
+            bot.stateConnect(); //метод проверяет состояние подключени к телеграму.
+        }
         try {
             lastidupdate = mydatabase.getLastupdID(); //id последнего обновления от бота(берем из БД при инициализации потока, запуске программы)
         } catch (SQLException e) {

@@ -5,4 +5,4 @@ COPY out/artifacts/TeleBotController_jar /telebot
 WORKDIR /telebot
 ENV PATH=${PATH}:/telebot
 #Start APP in docker-compose
-#CMD java -jar TeleBotController.jar
+#CMD java -jar TeleBotController.jar dbforbot 3306

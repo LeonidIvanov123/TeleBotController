@@ -28,6 +28,7 @@ public class BotCommand {
     }
 
     public void stateConnect(){
+        System.out.print("Connected to Telegram Bot: ");
         for(int i = 1; i<10; i++) {
             try {
                 URLConnection url = new URL(botAddress + "getMe").openConnection();
@@ -42,7 +43,10 @@ public class BotCommand {
                     ex.printStackTrace();
                 }
             }
-            if(statusConnect) break;
+            if(statusConnect){
+                System.out.println("sucsess.");
+                break;
+            }
         }
         if(!statusConnect){
             System.out.println("Do not connected to Telegram");
