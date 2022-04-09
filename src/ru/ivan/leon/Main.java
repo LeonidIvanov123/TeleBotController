@@ -15,21 +15,20 @@ public class Main {
     static String bdPort;
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("Start programm v:1.1"); //настроить лог в БД (logtable)
-
+        System.out.println("Start programm v:1.2"); //настроить лог в БД (logtable)
+            //args = new String[]{"localhost", "50770"};
         if(args.length>0){
             bdAddress = args[0];
             bdPort = args[1];
             System.out.println("Address BD mysql from cmd: "+ bdAddress + ":" + bdPort);
         } else{
-            bdAddress = "";
-            bdPort = "";
+            bdAddress = "localhost";
+            bdPort = "50770";
         }
         WorkThread wtr = new WorkThread(bdAddress, bdPort);
         Thread wtrTread = new Thread(wtr);
         wtrTread.start();
         wtrTread.join(); //Ждем завершения работы потока wtr
-
         System.out.println("Exit from programm");
     }
 
@@ -111,12 +110,13 @@ class WorkThread implements Runnable{
         }else {
             mydatabase = new DbConnector("jdbc:mysql://localhost:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot.db3");
         }
-        //mydatabase = new DbConnector("jdbc:mysql://localhost:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot.db3");
-        //mydatabase = new DbConnector("jdbc:mysql://dbforbot:3306/myDBforbot?enabledTLSProtocol=TLSv1.2", "myDBforbot");
         System.out.println("Connected to bot DBase:(init()) ====>" + mydatabase.connectToDB() +"<==== Address_db: "+ mydatabase.dbaddress);
         botAddress = mydatabase.getBotAddress();
         bot = new BotCommand(botAddress); //инициализация бота
-
+        if (!bot.statusConnect){
+            System.out.println("Ожидаем восстановления подключения к телеграму");
+            bot.stateConnect(); //метод проверяет состояние подключени к телеграму.
+        }
         try {
             lastidupdate = mydatabase.getLastupdID(); //id последнего обновления от бота(берем из БД при инициализации потока, запуске программы)
         } catch (SQLException e) {

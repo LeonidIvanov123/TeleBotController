@@ -1,7 +1,5 @@
 package ru.ivan.leon;
-//import org.json.JSONObject;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,6 +9,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,17 +20,47 @@ import java.util.Locale;
 public class BotCommand {
 
     String botAddress;
+    boolean statusConnect = true;
 
     BotCommand(String url){
         botAddress = url;
+        stateConnect();
+    }
+
+    public void stateConnect(){
+        System.out.print("Connected to Telegram Bot: ");
+        for(int i = 1; i<10; i++) {
+            try {
+                URLConnection url = new URL(botAddress + "getMe").openConnection();
+                InputStreamReader is = new InputStreamReader(url.getInputStream());
+                statusConnect = true; //если не ушли в catch
+            } catch (IOException e) {
+                System.out.print(i + " ... ");
+                statusConnect = false;
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if(statusConnect){
+                System.out.println("sucsess.");
+                break;
+            }
+        }
+        if(!statusConnect){
+            System.out.println("Do not connected to Telegram");
+            System.exit(1);
+        }
     }
 
     public String getDataBot(long offset){
-        String getData = "";
+        StringBuilder sb = new StringBuilder();
         URL mybot = null;
         try {
             if(offset == 1){
                 mybot = new URL(botAddress + "getupdates");
+                //if ERROR = in file 'createDBforBot.sql' add you telegrambot address!!!!
             }else{
                 mybot = new URL(botAddress + "getupdates" + "?offset=" + offset);
             }
@@ -39,14 +69,18 @@ public class BotCommand {
 
             String inputData = "";
             while ((inputData = in.readLine())!=null){
-                getData = getData + inputData + '\n';
+                sb.append(inputData);
             }
 
+            statusConnect = true;
         } catch (IOException e) {
-            System.out.println("Ошибка при установлении соединения с telegram(BotCommand" + "offset = " + offset);
-            e.printStackTrace();
+            System.out.println("Ошибка при установлении соединения с telegram(BotCommand" + "offset = " + offset
+            + "\nОшибка в адресе бота или нет соединения с telegram.org.");
+            statusConnect = false;
+            //e.printStackTrace();
         }
-        return getData;
+
+        return sb.toString();
     }
 
     public void sendtoChat(long chatId, String text){
