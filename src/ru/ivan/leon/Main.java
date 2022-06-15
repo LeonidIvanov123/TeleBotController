@@ -16,7 +16,6 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Start programm v:1.2"); //настроить лог в БД (logtable)
-            //args = new String[]{"localhost", "50770"};
         if(args.length>0){
             bdAddress = args[0];
             bdPort = args[1];
@@ -75,11 +74,7 @@ class WorkThread implements Runnable{
                     if(!(st.equals(""))) {
                         bot.sendtoChat(d.get(i).chat_id, st);
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
+                } catch (SQLException | IOException | ParseException e) {
                     e.printStackTrace();
                 }
             }

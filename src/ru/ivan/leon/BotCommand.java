@@ -4,7 +4,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.imageio.ImageIO;
 import javax.net.ssl.HttpsURLConnection;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -93,9 +96,6 @@ public class BotCommand {
             in.close();
 
         //    initbotKeyboard(chatId);
-        } catch (MalformedURLException e) {
-            System.out.println("Не получается ответить юзеру (BotCommand.sendtoChat)");
-            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("Не получается ответить юзеру (BotCommand.sendtoChat)");
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class BotCommand {
     }
 
     public ArrayList<RequestStruct> parseData(String str) throws UnsupportedEncodingException {
-        ArrayList<RequestStruct> dataarr = new ArrayList<RequestStruct>();
+        ArrayList<RequestStruct> dataarr = new ArrayList<>();
 
         while (str.indexOf("update_id") != -1) {
             RequestStruct r = new RequestStruct();
@@ -174,6 +174,18 @@ public class BotCommand {
             case ("Time"):
                 Date dt = new Date();
                 result = "Текущее время сервера: %0A " + dt.toString();
+                break;
+            case ("ScreenServer"):
+
+                    //у докер контейнера нет интерфейса))
+                    //Robot robot = new Robot();
+                    //BufferedImage screenShot = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+                    //ImageIO.write(screenShot, "JPG", new File("d:\\"+formatter.format(now.getTime())+".jpg"));
+                db.writeLOG("Делаем скриншот в " + new Date().toString());
+                break;
+            case ("Task"):
+                //создаем таск с напоминанием через n-минут
+                result = "Введите команду формата <Task + [время в минутах] + [событие(напоминание)]>";
                 break;
         }
         if(!result.equals(""))

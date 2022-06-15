@@ -1,8 +1,12 @@
 package ru.ivan.leon;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
+/*
+* Work with DB(ip:port, name db)
+*
+*
+ */
 class DbConnector {
     String dbaddress;
     String dbName;
@@ -38,6 +42,7 @@ class DbConnector {
         }
         if (dbCon != null) {
             stmt = dbCon.createStatement();
+            writeLOG("Успешно установлено соединение с БД "+ dbName + " ip " + dbaddress);
             return true;
         }
         else {
