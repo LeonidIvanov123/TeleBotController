@@ -21,8 +21,8 @@ public class Main {
             bdPort = args[1];
             System.out.println("Address BD mysql from cmd: "+ bdAddress + ":" + bdPort);
         } else{
-            bdAddress = "localhost";
-            bdPort = "50770";
+            bdAddress = "";
+            bdPort = "";
         }
         WorkThread wtr = new WorkThread(bdAddress, bdPort);
         Thread wtrTread = new Thread(wtr);

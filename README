@@ -1,0 +1,4 @@
+Telegram-bot. read test-message from user, store message in mysql-DB, request to user message.
+Docker-compose includes 2 Docker container:
+ - with java-app Telegram bot
+ - with mysql-DB
